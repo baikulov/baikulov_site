@@ -11,7 +11,7 @@
 
 
 
-<title>Обо мне</title>
+<title>Установка R и R-studio на Linux</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -388,31 +388,102 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Обо мне</h1>
+<h1 class="title toc-ignore">Установка R и R-studio на Linux</h1>
 
 </div>
 
 
-<p>Немного разбираюсь в веб-аналитике. Совсем чуть-чуть.</p>
+<p>В данном примере мы рассмотрим установку языка R и R-studio IDE на Ubuntu 16.04</p>
 <hr />
-<div id="родился-и-вырос" class="section level2">
-<h2>Родился и вырос</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
-<hr />
-</div>
-<div id="родился-и-ладно" class="section level2">
-<h2>Родился и ладно</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
+<div id="выбор-виртуальной-машины" class="section level2">
+<h2>Выбор виртуальной машины</h2>
+<p>В качестве облачного сервиса, предоставляющего услуги по хостингу виртуальных машин мы выберем Google Cloud Platform с сервисом Compute Engine. Это очень удобное решение для тех, кто уже работает с другими сервисами от GCP.</p>
+<p>Ранее я уже писал о том, как настроить и запустить VM на Google Cloud Platform через сервис Compute Engine. А сейчас перейдём к следующему шагу</p>
 <hr />
 </div>
-<div id="теперь-я-уж-взрослый" class="section level2">
-<h2>Теперь я уж взрослый</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
+<div id="подготовка-к-установке" class="section level2">
+<h2>Подготовка к установке</h2>
+<p>Для установки языка R в операционную систему Linux нам необходимо открыть терминал и вводить команды напрямую. Чтобы открыть терминал необходимо нажать на кнопку <strong>SSH</strong>.</p>
+<p><img src="images/gcp-ssh.png" /> Терминал откроется в новом окне. После открытия терминала начинаем последовательно вводить команды</p>
+<div id="первичное-обновление-linux" class="section level3">
+<h3>Первичное обновление Linux</h3>
+<p>Необходимо обновить все пакеты, установленные в версии Ubuntu 16.04</p>
+<pre class="r"><code>sudo apt-get update</code></pre>
+<p>Выглядит это примерно так</p>
+<p><img src="images/apt-update.png" /></p>
+</div>
+<div id="добавление-ссылки-на-репозиторий-cran" class="section level3">
+<h3>Добавление ссылки на репозиторий Cran</h3>
+<p>Установка будет производиться напрямую из репозитория Cran, поэтому необходимо добавить ссылку в файл <strong>/etc/apt/sources.list</strong>. Редактировать файл будем при помощи текстового редактора <strong>nano</strong></p>
+<pre class="r"><code>sudo nano /etc/apt/sources.list</code></pre>
+<p>Откроется содержимое файла. Спускаемся в самый низ и добавляем строчку</p>
+<pre class="r"><code>deb https://cran.rstudio.com/bin/linux/ubuntu xenial/</code></pre>
+<p><img src="images/nano-list.png" /></p>
+<p>После этого нажимаем сочетание клавиш Ctrl+X для сохранения изменений. Нам предложат сохранить изменения - жмём <strong>Y</strong></p>
+<p><img src="images/nano-save.png" /></p>
+<p>В последнем окне жмём <strong>Enter</strong> сохранения изменений в тот же файл.</p>
+</div>
+<div id="добавление-публичного-ключа" class="section level3">
+<h3>Добавление публичного ключа</h3>
+<p>Ключ используется для удостоверения подлинности и надежности репозитория. И добавляется с помощью следующей команды:</p>
+<pre class="r"><code>sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 51716619E084DAB9</code></pre>
+<p>которая запрашивает ключ напрямую у сервера сертификации Ubuntu — keyserver.ubuntu.com</p>
+<p>После чего обновляем кеш всех доступных пакетов</p>
+<pre class="r"><code>sudo apt update</code></pre>
 <hr />
 </div>
-<div id="без-куртки---прохладно" class="section level2">
-<h2>Без куртки - прохладно</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
+</div>
+<div id="установка-r-и-r-studio" class="section level2">
+<h2>Установка R и R-Studio</h2>
+<div id="установка-r" class="section level3">
+<h3>Установка R</h3>
+<p>Теперь можем установить необходимый нам пакет R с помощью команды:</p>
+<pre class="r"><code>sudo apt-get install r-base -y</code></pre>
+</div>
+<div id="установка-r-studio" class="section level3">
+<h3>Установка R-Studio</h3>
+<p>Помимо установки R, для удобства работы, нам нужно установить R Studio. И первым делом для этого нужно скачать установочный файл. Делаем это с помощью команды <strong>wget</strong></p>
+<pre class="r"><code>wget https://download2.rstudio.org/rstudio-server-1.0.136-amd64.deb</code></pre>
+<p>Теперь, для того, чтобы провести установку R Studio, устанавливаем еще один пакет — gdebi. Gdebi — программа для установки .deb пакетов.</p>
+<pre class="r"><code>sudo apt-get install gdebi-core -y</code></pre>
+<p>И последней командой устанавливаем R Studio со скачанного файла:</p>
+<pre class="r"><code>sudo gdebi rstudio-server-1.0.136-amd64.deb</code></pre>
+<p>Теперь необходимо указать порт, при обращении к которому вы будете получать доступ в R Studio. Для этого нужно внести информацию в файл /etc/rstudio/rserver.conf. Делаем это с помощью команды</p>
+<pre class="r"><code>sudo nano /etc/rstudio/rserver.conf</code></pre>
+<p>и добавляем в файл следующую строку:</p>
+<pre class="r"><code>www-port=80</code></pre>
+<p><img src="images/nano-port.png" /></p>
+<p>После этого задаем пароль для доступа в R Studio командой:</p>
+<pre class="r"><code>sudo passwd user_name</code></pre>
+<p>где, вместо <strong>user_name</strong> используем имя пользователя. При вводе пароля вам будет казаться, что ничего не происходит, но на самом деле введенные символы запоминаются. После второго успешного ввода вы увидите примерно следующее:</p>
+<p><img src="images/r-pass.png" /></p>
+<p>Осталось перезапустить серверный R-Studio и можно приступать к работе.</p>
+<pre class="r"><code>sudo service rstudio-server restart</code></pre>
+<hr />
+</div>
+</div>
+<div id="запуск-r-studio" class="section level2">
+<h2>Запуск R-Studio</h2>
+<p>Чтобы попасть в привычный интерфейс R-Studio нужно перейти по внешнему адресу, указанному в интерфейсе Compute Engine в колонке <strong>External_IP</strong></p>
+<p>При переходе вы скорее всего увидете ошибку:</p>
+<p><img src="images/r-https.png" /></p>
+<p>Это происходит потому, что подключаемся мы по протоколу HTTPS через порт 443, а наш R-server работает через протокол HTTP через порт 8080.</p>
+<p>Удалите букву <strong>s</strong> в URL</p>
+<blockquote>
+<p><a href="https://22.222.222.22/" class="uri">https://22.222.222.22/</a> -&gt; <a href="http://22.222.222.22/" class="uri">http://22.222.222.22/</a></p>
+</blockquote>
+<p>И перед вами будет привычный интерфейс R-Studio с окошком для ввода логина и пароля.</p>
+<p><img src="images/r-enter.png" /></p>
+<p>Вводим логин/пароль и пользуемся R-Studio в облаке</p>
+<hr />
+</div>
+<div id="дополнительные-материалы" class="section level2">
+<h2>Дополнительные материалы</h2>
+<ul>
+<li><a href="www.rstudio.com">Как настроить и запустить VM в GCP</a></li>
+<li><a href="www.rstudio.com">Основные команды Linux</a></li>
+<li><a href="www.rstudio.com">Установка R-Studio через Docker</a></li>
+</ul>
 </div>
 
 

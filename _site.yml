@@ -1,9 +1,23 @@
 name: "personal-website"
 output_dir: "."
+output:  
+  html_document:  
+    self_contained: no  
+    theme: flatly
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+    toc_depth: 2
+    css: style.css
+number_sections: true
 navbar:
-  title: "Personal Website"
+  title: "Буль-блог"
   left:
-    - text: "Home"
+    - text: "Главная"
       href: index.html
-    - text: "About Me"
+    - text: "Обо мне"
       href: about.html
+    - text: "Статьи"
+      menu:
+      - text: Установка R на Linux
+        href: r-linux.html

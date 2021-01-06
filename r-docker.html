@@ -11,7 +11,7 @@
 
 
 
-<title>Обо мне</title>
+<title>Установка R и R-studio из Docker</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -391,31 +391,84 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Обо мне</h1>
+<h1 class="title toc-ignore">Установка R и R-studio из Docker</h1>
 
 </div>
 
 
-<p>Немного разбираюсь в веб-аналитике. Совсем чуть-чуть.</p>
+<p>Docker - это сервис, который позволяет разворачивать полностью готовые к работе приложения в виртуальной среде. С его помощью можно достаточно быстро развернуть на сервере IDE R-Studio с последней версией R.</p>
+<p>Мы настроим виртуальную машину в сервисе Compute Engine с операционной системой Linux, установим на неё Docker, скачаем и запустим контейнер с R-Studio и R последней версии</p>
 <hr />
-<div id="родился-и-вырос" class="section level2">
-<h2>Родился и вырос</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
-<hr />
-</div>
-<div id="родился-и-ладно" class="section level2">
-<h2>Родился и ладно</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
+<div id="настройка-виртуальной-машины" class="section level2">
+<h2>Настройка виртуальной машины</h2>
+<p>В качестве облачного сервиса, предоставляющего услуги по хостингу виртуальных машин мы выберем Google Cloud Platform с сервисом Compute Engine. Это очень удобное решение для тех, кто уже работает с другими сервисами от GCP.</p>
+<p>Ранее я уже писал о том, как настроить и запустить VM на Google Cloud Platform через сервис Compute Engine. А сейчас перейдём к следующему шагу</p>
 <hr />
 </div>
-<div id="теперь-я-уж-взрослый" class="section level2">
-<h2>Теперь я уж взрослый</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
+<div id="подготовка-к-установке" class="section level2">
+<h2>Подготовка к установке</h2>
+<p>Для установки Docker нам необходимо открыть терминал и вводить команды напрямую. Чтобы открыть терминал необходимо нажать на кнопку <strong>SSH</strong>.</p>
+<p><img src="images/gcp-ssh.png" /> Терминал откроется в новом окне. После открытия терминала начинаем последовательно вводить команды</p>
+<div id="первичное-обновление-linux" class="section level3">
+<h3>Первичное обновление Linux</h3>
+<p>Необходимо обновить все пакеты, установленные в версии Ubuntu 16.04</p>
+<pre class="r"><code>sudo apt-get update</code></pre>
+<p>Выглядит это примерно так</p>
+<p><img src="images/apt-update.png" /></p>
 <hr />
 </div>
-<div id="без-куртки---прохладно" class="section level2">
-<h2>Без куртки - прохладно</h2>
-<p>Тут должен быть какой-то обычный текст с информацией о контентной части</p>
+</div>
+<div id="установка-docker" class="section level2">
+<h2>Установка Docker</h2>
+<p>Для начала установим пакеты, которые позволят нам устанавливать Docker через протокол https</p>
+<pre class="r"><code>sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common</code></pre>
+<p>Следующим шагом добавим ключ GPG Docker’а</p>
+<pre class="r"><code>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</code></pre>
+<p>Ещё одним шагом в подготовке будет добавление ссылки на стабильную версию репозитория Docker</p>
+<pre class="r"><code> sudo add-apt-repository \
+   &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable&quot;</code></pre>
+<p>И последним действием мы обновим все пакеты и установим Docker:</p>
+<pre class="r"><code>sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io</code></pre>
+<p>Теперь у нас установлен Docker и мы можем скачивать различные образы из частных или центрального репозитория Docker Hub</p>
+<hr />
+</div>
+<div id="запуск-контейнера-с-r-studio-и-r" class="section level2">
+<h2>Запуск контейнера с R-studio и R</h2>
+<p>Для скачивания образа с R-Studio необходимо выполнить команду:</p>
+<pre class="r"><code>sudo docker run -detach -p 8787:8080 -e PASSWORD=yourpassword --name my-rstudio rocker/rstudio</code></pre>
+<p>Данная команда скачивает нужный нам образ Docker из центрального репозитория Docker Hub и запускает контейнер с R-Studio</p>
+<p>Разберём команду:</p>
+<ul>
+<li><p><strong>sudo docker run</strong> отвечает за скачивание и запуск образа</p></li>
+<li><p><strong>-detach</strong> отвечает за запуск контейнера в фоновом режиме</p></li>
+<li><p><strong>-p 8787:8080</strong> говорит о том, что R-Studio будет доступна через порт 8787 на нашей VM</p></li>
+<li><p><strong>PASSWORD</strong> устанавливает пароль для входа в IDE</p></li>
+<li><p><strong>–name</strong> это название нашего контейнера</p></li>
+<li><p><strong>rocker/rstudio</strong> это название образа в репозитории</p></li>
+</ul>
+<p>После запуска вам стоит перейти по External_IP адресу вашей VM с указанием порта</p>
+<blockquote>
+<p><a href="http://22.222.222.22" class="uri">http://22.222.222.22</a></p>
+</blockquote>
+<p>и убедиться в том, что IDE доступна к работе. Логин для входа <strong>rstudio</strong>, а пароль мы указали в поле PASSWORD при запуске контейнера</p>
+<p><img src="images/r-enter.png" /></p>
+<hr />
+</div>
+<div id="дополнительные-материалы" class="section level2">
+<h2>Дополнительные материалы</h2>
+<ul>
+<li><a href="www.rstudio.com">Как настроить и запустить VM в GCP</a></li>
+<li><a href="www.rstudio.com">Основные команды Linux</a></li>
+<li><a href="https://baikulov.github.io/baikulov/r-linux.html">Установка R-Studio и R на Linux</a></li>
+</ul>
 </div>
 
 

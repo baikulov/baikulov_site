@@ -23,3 +23,5 @@ navbar:
         href: r-linux.html
       - text: Установка R на Linux через Docker
         href: r-docker.html
+      - text: Запуск скриптов R по расписанию
+        href: r-cron.html

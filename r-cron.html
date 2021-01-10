@@ -11,7 +11,7 @@
 
 
 
-<title>Установка R и R-studio на Linux</title>
+<title>Запуск скриптов R по расписанию</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -394,93 +394,44 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Установка R и R-studio на Linux</h1>
+<h1 class="title toc-ignore">Запуск скриптов R по расписанию</h1>
 
 </div>
 
 
-<p>В данном примере мы рассмотрим установку языка R и R-studio IDE на Ubuntu 16.04</p>
+<p>Возможность исполнять написанные скрипты по расписанию позволяет решать большое количество важных задач от ETL до формирования и отправки отчетности по почте или в мессенджер</p>
 <hr />
-<div id="выбор-виртуальной-машины" class="section level2">
-<h2>Выбор виртуальной машины</h2>
-<p>В качестве облачного сервиса, предоставляющего услуги по хостингу виртуальных машин мы выберем Google Cloud Platform с сервисом Compute Engine. Это очень удобное решение для тех, кто уже работает с другими сервисами от GCP.</p>
-<p>Ранее я уже писал о том, как настроить и запустить VM на Google Cloud Platform через сервис Compute Engine. А сейчас перейдём к следующему шагу</p>
-<hr />
-</div>
-<div id="подготовка-к-установке" class="section level2">
-<h2>Подготовка к установке</h2>
-<p>Для установки языка R в операционную систему Linux нам необходимо открыть терминал и вводить команды напрямую. Чтобы открыть терминал необходимо нажать на кнопку <strong>SSH</strong>.</p>
-<p><img src="images/gcp-ssh.png" /> Терминал откроется в новом окне. После открытия терминала начинаем последовательно вводить команды</p>
-<div id="первичное-обновление-linux" class="section level3">
-<h3>Первичное обновление Linux</h3>
-<p>Необходимо обновить все пакеты, установленные в версии Ubuntu 16.04</p>
-<pre class="r"><code>sudo apt-get update</code></pre>
-<p>Выглядит это примерно так</p>
-<p><img src="images/apt-update.png" /></p>
-</div>
-<div id="добавление-ссылки-на-репозиторий-cran" class="section level3">
-<h3>Добавление ссылки на репозиторий Cran</h3>
-<p>Установка будет производиться напрямую из репозитория Cran, поэтому необходимо добавить ссылку в файл <strong>/etc/apt/sources.list</strong>. Редактировать файл будем при помощи текстового редактора <strong>nano</strong></p>
-<pre class="r"><code>sudo nano /etc/apt/sources.list</code></pre>
-<p>Откроется содержимое файла. Спускаемся в самый низ и добавляем строчку</p>
-<pre class="r"><code>deb https://cran.rstudio.com/bin/linux/ubuntu xenial/</code></pre>
-<p><img src="images/nano-list.png" /></p>
-<p>После этого нажимаем сочетание клавиш Ctrl+X для сохранения изменений. Нам предложат сохранить изменения - жмём <strong>Y</strong></p>
-<p><img src="images/nano-save.png" /></p>
-<p>В последнем окне жмём <strong>Enter</strong> сохранения изменений в тот же файл.</p>
-</div>
-<div id="добавление-публичного-ключа" class="section level3">
-<h3>Добавление публичного ключа</h3>
-<p>Ключ используется для удостоверения подлинности и надежности репозитория. И добавляется с помощью следующей команды:</p>
-<pre class="r"><code>sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 51716619E084DAB9</code></pre>
-<p>которая запрашивает ключ напрямую у сервера сертификации Ubuntu — keyserver.ubuntu.com</p>
-<p>После чего обновляем кеш всех доступных пакетов</p>
-<pre class="r"><code>sudo apt update</code></pre>
+<div id="установка-библиотеки-cron" class="section level2">
+<h2>Установка библиотеки Cron</h2>
+<p>В каждой операционной системе есть возможность запускать файлы по расписанию. В Windows - планировщик задач, в Linux - Cron. Чтобы установить нужную нам библиотеку, необходимо выполнить код:</p>
+<pre><code>install.packages(&#39;cronR&#39;, dependencies = TRUE)</code></pre>
+<p>После установки, в меню “Addins” у нас появится новый раздел - <strong>“Schedule R scripts on Linux/Unix”</strong></p>
+<p><img src="images/addins-cron.png" /></p>
 <hr />
 </div>
-</div>
-<div id="установка-r-и-r-studio" class="section level2">
-<h2>Установка R и R-Studio</h2>
-<div id="установка-r" class="section level3">
-<h3>Установка R</h3>
-<p>Теперь можем установить необходимый нам пакет R с помощью команды:</p>
-<pre class="r"><code>sudo apt-get install r-base -y</code></pre>
-</div>
-<div id="установка-r-studio" class="section level3">
-<h3>Установка R-Studio</h3>
-<p>Помимо установки R, для удобства работы, нам нужно установить R Studio. И первым делом для этого нужно скачать установочный файл. Делаем это с помощью команды <strong>wget</strong></p>
-<pre class="r"><code>wget https://download2.rstudio.org/rstudio-server-1.0.136-amd64.deb</code></pre>
-<p>Теперь, для того, чтобы провести установку R Studio, устанавливаем еще один пакет — gdebi. Gdebi — программа для установки .deb пакетов.</p>
-<pre class="r"><code>sudo apt-get install gdebi-core -y</code></pre>
-<p>И последней командой устанавливаем R Studio со скачанного файла:</p>
-<pre class="r"><code>sudo gdebi rstudio-server-1.0.136-amd64.deb</code></pre>
-<p>Теперь необходимо указать порт, при обращении к которому вы будете получать доступ в R Studio. Для этого нужно внести информацию в файл /etc/rstudio/rserver.conf. Делаем это с помощью команды</p>
-<pre class="r"><code>sudo nano /etc/rstudio/rserver.conf</code></pre>
-<p>и добавляем в файл следующую строку:</p>
-<pre class="r"><code>www-port=80</code></pre>
-<p><img src="images/nano-port.png" /></p>
-<p>После этого задаем пароль для доступа в R Studio командой:</p>
-<pre class="r"><code>sudo passwd user_name</code></pre>
-<p>где, вместо <strong>user_name</strong> используем имя пользователя. При вводе пароля вам будет казаться, что ничего не происходит, но на самом деле введенные символы запоминаются. После второго успешного ввода вы увидите примерно следующее:</p>
-<p><img src="images/r-pass.png" /></p>
-<p>Осталось перезапустить серверный R-Studio и можно приступать к работе.</p>
-<pre class="r"><code>sudo service rstudio-server restart</code></pre>
+<div id="интерфейс-schedule-r-scripts" class="section level2">
+<h2>Интерфейс Schedule R scripts</h2>
+<p>Для удобства работы с данной библиотекой был разработан UI с понятной навигацией. Разберём интерфейс.</p>
+<p>После перехода по ссылке у нас откроется pop-up с двумя вкладками(внизу): * Upload and create new jobs * Manage existing jobs</p>
+<p><img src="images/scheduler-ui.png" /></p>
+<p>Как понятно из названия, первая вкладка отвечает за настройку и запуск расписаний для скриптов, а вторая отвечает за управление, уже запущенными расписаниями.</p>
 <hr />
 </div>
+<div id="запуск-скрипта-r-по-расписанию" class="section level2">
+<h2>Запуск скрипта R по расписанию</h2>
+<p>В качестве скрипта может выступать любой файл с расширением R. Например, я запускаю каждый день по расписанию скрипт, который скачивает данные из Google Analytics и записывает результат в таблицу Google Sheets</p>
+<p>Проведём тестовую настройку: * Select File - выбирает файл, который необходимо исполнять по расписанию * Selected Rscript - показывает путь до файла(пригодится) * Launch date - дата первого запуска * Launch hour - час и минута первого запуска * Schedule - периодичность выполнения(Once - один раз, Every min/hour/day/week/month - тут понятно, Asis - более мелкие периоды времени, что указываются в поле <strong>ASIS cron schedule</strong>) * Job description - текстовое описание запускаемого расписания * Job identifier - идентификатор, по которому мы потом будем искать нужный нам скрипт в панели <strong>Manage existing jobs</strong> * Rscript repository path: launch &amp; log location - служба cron не только исполняет скрипты по расписанию, но и пишет логи результатов, поэтому тут стоит указать адрес такой же, как для исполняемого скрипта. Чтобы оба файла лежали в одном месте</p>
+<hr />
 </div>
-<div id="запуск-r-studio" class="section level2">
-<h2>Запуск R-Studio</h2>
-<p>Чтобы попасть в привычный интерфейс R-Studio нужно перейти по внешнему адресу, указанному в интерфейсе Compute Engine в колонке <strong>External_IP</strong></p>
-<p>При переходе вы скорее всего увидете ошибку:</p>
-<p><img src="images/r-https.png" /></p>
-<p>Это происходит потому, что подключаемся мы по протоколу HTTPS через порт 443, а наш R-server работает через протокол HTTP через порт 8080.</p>
-<p>Удалите букву <strong>s</strong> в URL</p>
-<blockquote>
-<p><a href="https://22.222.222.22/" class="uri">https://22.222.222.22/</a> -&gt; <a href="http://22.222.222.22/" class="uri">http://22.222.222.22/</a></p>
-</blockquote>
-<p>И перед вами будет привычный интерфейс R-Studio с окошком для ввода логина и пароля.</p>
-<p><img src="images/r-enter.png" /></p>
-<p>Вводим логин/пароль и пользуемся R-Studio в облаке</p>
+<div id="управление-расписание-скриптов" class="section level2">
+<h2>Управление расписание скриптов</h2>
+<p>Во второй вкладке нас интересует одно поле и две кнопки:</p>
+<ul>
+<li>Select job - выбираем идентификатор нужного файла</li>
+<li>Show job - в консоли выводится детальная информация по расписанию(время запуска, периодичность, название и описание)</li>
+<li>Delete job - удаление расписания</li>
+</ul>
+<p>Теперь вы сможете самостоятельно настроить расписание для автоматического выполнения скриптов R</p>
 <hr />
 </div>
 <div id="дополнительные-материалы" class="section level2">

@@ -158,6 +158,6 @@ sudo service rstudio-server restart
 
 ***
 ## Дополнительные материалы
-* [Как настроить и запустить VM в GCP](www.rstudio.com)
-* [Основные команды Linux](www.rstudio.com)
-* [Установка R-Studio через Docker](https://baikulov.github.io/baikulov/r-docker.html)
+* [Запуск скриптов R по расписанию](http://baikulov.pro/r-cron.html)
+* [Установка R-Studio через Docker](http://baikulov.pro/r-linux.html)
+* [Установка R-Studio через Docker](http://baikulov.pro/r-docker.html)

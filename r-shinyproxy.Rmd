@@ -1,0 +1,112 @@
+---
+title: "Установка Shiny Proxy"
+output: html_document
+---
+
+Установка Shiny Proxy на виртуальную машину GCP
+
+## Настройка VM на GCP
+
+Настраиваем виртуальную машину на Linux.
+
+## Установка GIT
+
+Устанавливаем GIT <https://githowto.com/ru>.
+
+Сперва необходимо обновить все пакеты Ubuntu
+
+```{r eval=FALSE}
+sudo apt-get update
+```
+
+После этого можно устанавливать сам GIT
+```{r eval=FALSE}
+sudo apt-get install git -y
+```
+
+## Установка Docker и Docker Compose
+
+Сперва необходимо обновить все пакеты Ubuntu
+
+```{r eval=FALSE}
+sudo apt-get update
+```
+
+Для начала установим пакеты, которые позволят нам устанавливать Docker через протокол https
+
+```{r eval=FALSE}
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common -y
+```
+
+Следующим шагом добавим ключ GPG Docker'а
+
+```{r eval=FALSE}
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+
+Ещё одним шагом в подготовке будет добавление ссылки на стабильную версию репозитория Docker
+
+```{r eval=FALSE}
+ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+```
+
+После этого мы обновим все пакеты и установим Docker:
+
+```{r eval=FALSE}
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+Теперь у нас установлен Docker и мы можем скачивать различные образы из частных или центрального репозитория Docker Hub
+
+Для установки Docker Compose необходимо добавить запись 
+
+```{r eval=FALSE}
+sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+И последним шагом необходимо применить права к бинарному файлу
+
+```{r eval=FALSE}
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+Протестировав установку вы получите что-то вроде:
+```{r eval=FALSE}
+docker-compose --version
+docker-compose version 1.28.5, build 1110ad01
+```
+
+Теперь всё необходимое для запуска Shiny Proxy установлено. Можно переходить непосредственно к настройке.
+
+## Установка Shiny Proxy
+
+Клонируем репозиторий и переходим в папку docker-compose-example
+
+```{r eval=FALSE}
+git clone git@github.com:kassambara/shinyproxy-config.git
+cd shinyproxy-config/docker-compose-example
+```
+
+
+Теперь необходимо собрать наш Docker-compose и запустить контейнеры
+
+```{r eval=FALSE}
+sudo docker-compose build
+sudo docker-compose up -d shinyproxy
+```
+
+
+Для остановки контейнеров необходимо выполнить:
+```{r eval=FALSE}
+sudo docker-compose down
+```
+

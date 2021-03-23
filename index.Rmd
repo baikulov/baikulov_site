@@ -28,4 +28,12 @@ title: "Последние записи"
 
 ***
 
+## Настройка ShinyProxy через Docker Compose
+
+Настройка и запуск ShinyProxy с помощью Docker Compose
+ 
+[Читать](r-shinyproxy.html)
+
+***
+
 Следующий пост скоро будет...

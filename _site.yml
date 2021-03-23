@@ -25,3 +25,5 @@ navbar:
         href: r-docker.html
       - text: Запуск скриптов R по расписанию
         href: r-cron.html
+      - text: Настройка ShinyProxy через Docker Compose
+        href: r-shinyproxy.html

@@ -26,6 +26,8 @@ sudo apt-get install git -y
 
 ## Установка Docker и Docker Compose
 
+Сперва необходимо обновить все пакеты Ubuntu. Свежую версию всегда можно взять на официальном сайте <https://docs.docker.com/engine/install/ubuntu/>.
+
 Сперва необходимо обновить все пакеты Ubuntu
 
 ```{r eval=FALSE}
@@ -39,23 +41,22 @@ sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
-    gnupg-agent \
-    software-properties-common -y
+    gnupg \
+    lsb-release
 ```
 
 Следующим шагом добавим ключ GPG Docker'а
 
 ```{r eval=FALSE}
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 ```
 
 Ещё одним шагом в подготовке будет добавление ссылки на стабильную версию репозитория Docker
 
 ```{r eval=FALSE}
- sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
+ echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
 После этого мы обновим все пакеты и установим Docker:
@@ -67,7 +68,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 Теперь у нас установлен Docker и мы можем скачивать различные образы из частных или центрального репозитория Docker Hub
 
-Для установки Docker Compose необходимо добавить запись 
+Для установки Docker Compose необходимо добавить запись. Свежую версию всегда можно взять на официальном сайте <https://docs.docker.com/compose/install/>.
 
 ```{r eval=FALSE}
 sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -92,7 +93,7 @@ docker-compose version 1.28.5, build 1110ad01
 Клонируем репозиторий и переходим в папку docker-compose-example
 
 ```{r eval=FALSE}
-git clone git@github.com:kassambara/shinyproxy-config.git
+git clone https://github.com/baikulov/shinyproxy-config.git
 cd shinyproxy-config/docker-compose-example
 ```
 
@@ -106,7 +107,7 @@ sudo docker-compose up -d shinyproxy
 
 
 Для остановки контейнеров необходимо выполнить:
-```{r eval=FALSE}
+```{r eval=FALSE, }
 sudo docker-compose down
 ```
 

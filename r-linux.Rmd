@@ -1,5 +1,10 @@
 ---
 title: "Установка R и R-studio на Linux"
+output: 
+  html_document:
+    includes:
+       in_header: ga.html
+       after_body: gtm.html
 ---
 
 В данном примере мы рассмотрим установку языка R и R-studio IDE на Ubuntu 16.04

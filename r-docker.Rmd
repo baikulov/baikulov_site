@@ -1,5 +1,10 @@
 ---
 title: "Установка R и R-studio из Docker"
+output: 
+  html_document:
+    includes:
+       in_header: ga.html
+       after_body: gtm.html
 ---
 
 Docker - это сервис, который позволяет разворачивать полностью готовые к работе приложения в виртуальной среде. С его помощью можно достаточно быстро развернуть на сервере IDE R-Studio с последней версией R.

@@ -1,6 +1,10 @@
 ---
 title: "Установка Shiny Proxy"
-output: html_document
+output: 
+  html_document:
+    includes:
+       in_header: ga.html
+       after_body: gtm.html
 ---
 
 Установка Shiny Proxy на виртуальную машину GCP

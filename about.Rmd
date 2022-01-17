@@ -4,6 +4,7 @@ output:
   html_document:
     includes:
        in_header: ga.html
+       after_body: gtm.html
 ---
 
 Немного разбираюсь в веб-аналитике. Совсем чуть-чуть. 

@@ -1,5 +1,9 @@
 ---
 title: "Обо мне"
+output: 
+  html_document:
+    includes:
+       in_header: ga.html
 ---
 
 Немного разбираюсь в веб-аналитике. Совсем чуть-чуть. 
